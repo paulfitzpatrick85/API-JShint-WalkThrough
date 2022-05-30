@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="content">
+
+    </div>
+
+    <script>
+        //chaining used.
+        //all arrow functions here are callbacks
+        // //when ran should return json response from api (js object of key:value pairs)
+        // fetch("https://ci-swapi.herokuapp.com/api/")                                                                    
+        // .then(response => response.json()) // gets reposnse, converts into plain text (if using .text, not .json) and stores it in variable called response
+        //                                    //using.json instead return [object object]
+        // .then(data => {
+        //     document.getElementById("content").innerText = data;        //set inner text of content div to data response
+        // })                                  //innerText = data.people; will display https://ci-swapi.herokuapp.com/api/people/ 
+        // .catch((e) =>{
+        //     console.error("Error:", e);
+        // })
+
+
+        //when callback is separate function, makes easier to read 
+        //and separates the which code retrieving and which is manipulating and displaying
+        fetch("https://ci-swapi.herokuapp.com/api/")                                                                    
+        .then(response => response.json()) 
+        .then(data => displayData(data))                                   
+        .catch((e) =>{
+            console.error("Error:", e);
+        })
+
+        function displayData(data) {
+            document.getElementById("content").innerText = data;
+        }
+
+    </script>
+</body>
+</html>
