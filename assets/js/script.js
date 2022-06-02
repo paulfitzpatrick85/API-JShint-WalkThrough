@@ -26,7 +26,7 @@ async function postForm(e) {
     const form =  processOptions(new FormData(document.getElementById("checksform")));     //formData is a js interface which grabs form data asan object in key pairs
     // for (let entry of form.entries()) {    //for testing return
     //     console.log(entry);
-    }
+    
 //TEST -entries method allows us to iterate through form data to ensure data was captured 
     // for (let e of form.entries()){     
     //     console.log(e);
@@ -47,13 +47,15 @@ async function postForm(e) {
         // json method returns a promise, which must be awaited also
         if (response.ok) {
             //console.log(data);   //used to test first time round
-               displayErrors(data);
+            displayStatus(data);
         } else {
+            displayException(data);
             throw new Error(data.error);
         }
+    }
 
 
-
+//create modal (run checks button)
 function displayErrors(data) {
     let heading = `JSHint Results for ${data.file}`; //pickup file value from returned json
     if (data.total_errors === 0) {
@@ -88,11 +90,12 @@ async function getStatus(e) {
         displayStatus(data);  //display data in the modal instead of console logging
         //console.log(data) //can log data.expiry instead to only see date in console without the status code
     } else{
+        displayException(data);  //display data in the modal instead of console logging
         throw new Error(data.error); //data.error is descriptive message from json that is returned
     }
 }
 
-//create modal
+//create modal (check key button)
 function displayStatus(data) {
 
     let heading = "API_Key status";
@@ -103,6 +106,21 @@ function displayStatus(data) {
     document.getElementById("results-content").innerHTML = results;
     resultsModal.show();
 }
+
+//create modal (to test, try return empty form)
+function displayException(data) {
+    let heading = `An Exception has occured`;
+    results = `<div>The API returned status code ${data.status_code}`;
+    results += `<div>Error text: <strong>${data.error_no}</strong></div>`;
+    results += `<div>Error text: <strong>${data.error}</strong></div>`;
+
+    document.getElementById("resultsModalTitle").innerHTML = heading;
+    document.getElementById("results-content").innerHTML = results;
+    resultsModal.show();                                                   //this is a bootstrap method
+}
+
+
+
 
 
 
