@@ -7,10 +7,26 @@ const resultsModal = new bootstrap.Modal(document.getElementById("resultsModal")
 document.getElementById("status").addEventListener("click", e => getStatus(e));
 document.getElementById("submit").addEventListener("click", e => postForm(e));
 
+
+//create options - a comma separated list of options, rather then the consoles default indivual array of ["options", "es6"(e.g)], [options, es8(e.g)]
+function processOptions(form) {         // processOptions is now added to function postForm also
+    let optArray = [];
+    for (let entry of form.entries()) {
+        if (entry[0] === "options") {          //[0] = "options"
+            optArray.push(entry[1]);           // [1] = "es6"
+        }
+    }
+    form.delete("options");                    //delete existing options
+    form.append("options", optArray.join());   // append new options, optArray is the value, join convert to string with comma by default
+    return form;
+}
+
 //POST request
 async function postForm(e) {
-    const form = new FormData(document.getElementById("checksform"));     //formdata is a js interface which grabs form data asan object in key pairs
-
+    const form =  processOptions(new FormData(document.getElementById("checksform")));     //formData is a js interface which grabs form data asan object in key pairs
+    // for (let entry of form.entries()) {    //for testing return
+    //     console.log(entry);
+    }
 //TEST -entries method allows us to iterate through form data to ensure data was captured 
     // for (let e of form.entries()){     
     //     console.log(e);
@@ -35,7 +51,7 @@ async function postForm(e) {
         } else {
             throw new Error(data.error);
         }
-}
+
 
 
 function displayErrors(data) {
